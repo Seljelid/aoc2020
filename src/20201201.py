@@ -22,12 +22,6 @@ def find_triplet(series, sum):
         for j in range(i + 1, len(series)):
             if current_sum - series.iloc[j] in s:
                 triplet = [series.iloc[i], series.iloc[j], current_sum - series.iloc[j]]
-                print(
-                    "Triplet is:",
-                    series.iloc[i],
-                    series.iloc[j],
-                    current_sum - series.iloc[j],
-                )
                 return triplet
             s.add(series.iloc[j])
 
