@@ -23,6 +23,7 @@ def validate_passwords():
         ^ (x.pw.count(x.letter, x.high - 1, x.high) == 1),
         axis=1,
     )
+    print(df.valid.value_counts())
 
 
 if __name__ == "__main__":
