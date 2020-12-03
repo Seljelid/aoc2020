@@ -2,23 +2,23 @@ import numpy as np
 
 
 def find_trees():
+    data = np.loadtxt("data/20201203.txt", dtype="str", comments=None)
     instructions = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
     n_trees = []
     for instruction in instructions:
-        trees = traverse_map(instruction[0], instruction[1])
+        trees = traverse_map(data, instruction[0], instruction[1])
         n_trees.append(trees)
     print(np.prod(n_trees))
 
 
-def traverse_map(right=3, down=1):
-    data = np.loadtxt("data/20201203.txt", dtype="str", comments=None)
+def traverse_map(map, right=3, down=1):
     tree_at = [
         [
             index
             for index, char in enumerate(_shift_string(s, int((right * idx) / down)))
             if char == "#"
         ]
-        for idx, s in enumerate(data)
+        for idx, s in enumerate(map)
     ]
     tree_pos_flat = [
         tree_pos
