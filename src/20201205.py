@@ -26,6 +26,19 @@ def boarding_passes():
     bdp["seat_id"] = bdp.row * 8 + bdp.col
     print(f"Highest seat id is: {bdp.seat_id.max()}")
 
+    # Part 2
+    # Drop first and last row
+    bdp = bdp.drop(bdp[bdp.row == bdp.row.max()].index)
+    bdp = bdp.drop(bdp[bdp.row == bdp.row.min()].index)
+
+    df = bdp.groupby("row").count()
+    my_row_num = df[df.col != 8].index[0]
+    taken_cols = bdp[bdp.row == my_row_num].col
+    available_cols = list(range(0, 8))
+    my_col_num = list(set(available_cols) - set(taken_cols))[0]
+    my_seat_id = my_row_num * 8 + my_col_num
+    print(f"My seat id is: {my_seat_id}")
+
 
 def _get_row_num(code: str):
     row_range = list(range(0, 128))
