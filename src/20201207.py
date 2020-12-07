@@ -2,7 +2,7 @@ from collections import Counter
 
 
 def bags():
-    file = open("data/20201207_test2.txt")
+    file = open("data/20201207.txt")
     lines = file.readlines()
     bags = {}
     for line in lines:
@@ -29,7 +29,7 @@ def bags():
             cnt += elem
         next_bag = dict(cnt)
         if bool(next_bag):
-            current_collection.update(next_bag)
+            current_collection = dict(Counter(current_collection) + Counter(next_bag))
             return _extract_bags(next_bag, current_collection)
         else:
             return current_collection
