@@ -1,5 +1,8 @@
+from collections import Counter
+
+
 def bags():
-    file = open("data/20201207.txt")
+    file = open("data/20201207_test2.txt")
     lines = file.readlines()
     bags = {}
     for line in lines:
@@ -18,9 +21,13 @@ def bags():
         bags[outer] = content_dict
 
     def _extract_bags(bag: dict, current_collection: dict):
-        next_level = [bags[k] for k in bag.keys()]
-        next_level = list(filter(None, next_level))
-        next_bag = dict((key, k[key]) for k in next_level for key in k)
+        next_level = [Counter(bags[k]) for k in bag.keys()]
+        cnt = Counter()
+        for elem, multiplier in zip(next_level, bag.values()):
+            for k in elem.keys():
+                elem[k] = elem[k] * multiplier
+            cnt += elem
+        next_bag = dict(cnt)
         if bool(next_bag):
             current_collection.update(next_bag)
             return _extract_bags(next_bag, current_collection)
@@ -37,6 +44,9 @@ def bags():
         if "shiny gold" in v.keys():
             counter += 1
     print(f"There can be shiny golden bags in {counter} bag types")
+
+    bags_inside_golden = sum(bag_dict["shiny gold"].values())
+    print(f"A shiny golden bag contains {bags_inside_golden} other bags")
 
 
 if __name__ == "__main__":
