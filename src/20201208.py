@@ -7,33 +7,7 @@ def game_stop():
     )
     df["order"] = pd.Series(dtype="int")
 
-    def _run_program(df: pd.DataFrame()):
-        last_visited = []
-        stop = False
-        idx = 0
-        acc = 0
-        terminated_correctly = False
-        while not stop:
-            if idx in last_visited:
-                stop = True
-                terminated_correctly = False
-            elif idx == len(df):
-                print("Program terminated!!")
-                stop = True
-                terminated_correctly = True
-            else:
-                if df.loc[idx].operation == "nop":
-                    last_visited.append(idx)
-                    idx += 1
-                elif df.loc[idx].operation == "acc":
-                    last_visited.append(idx)
-                    acc += df.loc[idx].arg
-                    idx += 1
-                elif df.loc[idx].operation == "jmp":
-                    last_visited.append(idx)
-                    idx += df.loc[idx].arg
-        return acc, terminated_correctly
-
+    # Part 1
     acc, _ = _run_program(df)
     print(f"The acc value is {acc}")
 
@@ -52,6 +26,34 @@ def game_stop():
         s_idx += 1
 
     print(f"The acc value for part 2 is {acc}")
+
+
+def _run_program(program: pd.DataFrame()):
+    last_visited = []
+    stop = False
+    idx = 0
+    acc = 0
+    terminated_correctly = False
+    while not stop:
+        if idx in last_visited:
+            stop = True
+            terminated_correctly = False
+        elif idx == len(program):
+            print("Program terminated!!")
+            stop = True
+            terminated_correctly = True
+        else:
+            if program.loc[idx].operation == "nop":
+                last_visited.append(idx)
+                idx += 1
+            elif program.loc[idx].operation == "acc":
+                last_visited.append(idx)
+                acc += program.loc[idx].arg
+                idx += 1
+            elif program.loc[idx].operation == "jmp":
+                last_visited.append(idx)
+                idx += program.loc[idx].arg
+    return acc, terminated_correctly
 
 
 if __name__ == "__main__":
