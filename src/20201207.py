@@ -20,7 +20,7 @@ def bags():
             content_dict = {}
         bags[outer] = content_dict
 
-    def _extract_bags(bag: dict, current_collection: dict):
+    def _extract_bags(bag: dict, current_collection: dict) -> dict:
         next_level = [Counter(bags[k]) for k in bag.keys()]
         next_bag = Counter()
         for elem, multiplier in zip(next_level, bag.values()):
