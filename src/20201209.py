@@ -25,12 +25,12 @@ def _find_weakness(input: list, number: int):
     start_idx = 0
     while not found:
         found = (
-            number in list(itertools.accumulate(input[start_idx:]))[1:]
+            number in np.cumsum(input[start_idx:])[1:]
         )  # From 1st position if the number itself present
         if found:
-            accumulates = list(itertools.accumulate(input[start_idx:]))
-            found_at = accumulates.index(number)
-            accumulates = np.array(accumulates[0:found_at])
+            accumulates = np.cumsum(input[start_idx:])
+            found_at = np.argwhere(accumulates == number)[0][0]
+            accumulates = accumulates[0:found_at]
             accumulates[1:] -= accumulates[:-1].copy()
             return accumulates.min() + accumulates.max()
         start_idx += 1
