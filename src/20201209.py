@@ -24,7 +24,9 @@ def _find_weakness(input: list, number: int):
     found = False
     start_idx = 0
     while not found:
-        found = number in list(itertools.accumulate(input[start_idx:]))[1:]
+        found = (
+            number in list(itertools.accumulate(input[start_idx:]))[1:]
+        )  # From 1st position if the number itself present
         if found:
             accumulates = list(itertools.accumulate(input[start_idx:]))
             found_at = accumulates.index(number)
