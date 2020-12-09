@@ -1,4 +1,5 @@
 import itertools
+import numpy as np
 
 
 def encoding_error():
@@ -15,6 +16,22 @@ def encoding_error():
             break
 
     # Part 2
+    weakness = _find_weakness(input, number)
+    print(f"The weakness is {weakness}")
+
+
+def _find_weakness(input: list, number: int):
+    found = False
+    start_idx = 0
+    while not found:
+        found = number in list(itertools.accumulate(input[start_idx:]))[1:]
+        if found:
+            accumulates = list(itertools.accumulate(input[start_idx:]))
+            found_at = accumulates.index(number)
+            accumulates = np.array(accumulates[0:found_at])
+            accumulates[1:] -= accumulates[:-1].copy()
+            return accumulates.min() + accumulates.max()
+        start_idx += 1
 
 
 def _sum_in_permutations(preamble: list, number: int) -> bool:
