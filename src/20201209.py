@@ -16,24 +16,45 @@ def encoding_error():
             break
 
     # Part 2
-    weakness = _find_weakness(input, number)
+    # import timeit
+
+    # t1 = timeit.Timer(lambda: _find_weakness(input, number))
+    # print(t1.timeit(100) / 100)
+    # t2 = timeit.Timer(lambda: _find_weakness_brutus(input, number))
+    # print(t2.timeit(100) / 100)
+    # weakness = _find_weakness(input, number)
+    # print(f"The weakness is {weakness}")
+    weakness = _find_weakness_brutus(input, number)
     print(f"The weakness is {weakness}")
 
 
 def _find_weakness(input: list, number: int):
-    found = False
-    start_idx = 0
-    while not found:
-        found = (
-            number in np.cumsum(input[start_idx:])[1:]
-        )  # From 1st position if the number itself present
+    for idx, _ in enumerate(input):
+        found = number in itertools.accumulate(input[idx:])
         if found:
-            accumulates = np.cumsum(input[start_idx:])
-            found_at = np.argwhere(accumulates == number)[0][0]
-            accumulates = accumulates[0:found_at]
+            accumulates = list(itertools.accumulate(input[idx:]))
+            found_at = accumulates.index(number)
+            accumulates = np.array(accumulates[0:found_at])
             accumulates[1:] -= accumulates[:-1].copy()
             return accumulates.min() + accumulates.max()
-        start_idx += 1
+
+
+def _find_weakness_brutus(input: list, number: list):
+    chunk_size = 2
+    found = False
+    while not found:
+        overlap = chunk_size - 1
+        chunks = [
+            input[idx : idx + chunk_size]
+            for idx in range(0, len(input), chunk_size - overlap)
+        ]
+        sums = [sum(chunk) for chunk in chunks]
+        found = number in sums
+        if found:
+            at = sums.index(number)
+            pieces = chunks[at]
+            return min(pieces) + max(pieces)
+        chunk_size += 1
 
 
 def _sum_in_permutations(preamble: list, number: int) -> bool:
