@@ -1,4 +1,6 @@
 import re
+import itertools
+from copy import deepcopy
 
 
 def docking_data():
@@ -24,7 +26,45 @@ def docking_data():
             raise Exception("Invalid input")
 
     agg = sum([int(val, 2) for val in memory.values()])
-    print(f"The sum is {agg}")
+    print(f"The sum is {agg} in part 1")
+
+    # Part 2
+    memory = {}
+    for line in lines:
+        if line.startswith("mask"):
+            mask = line.split("=")[1].strip()
+        elif line.startswith("mem"):
+            mem_place = int(re.search(r"\d+", line).group())
+            mem_place = bin(mem_place)[2:].zfill(36)
+            value = int(re.search(r"\d+", line.split("=")[1]).group())
+            addresses = _get_addresses(mask, mem_place)
+            for address in addresses:
+                memory[address] = value
+
+    agg = sum(memory.values())
+    print(f"The sum is {agg} in part 2")
+
+
+def _get_addresses(mask: str, mem_place):
+    mem_place = "".join(
+        [
+            shifted_bit if shifted_bit in ["1", "X"] else bit
+            for shifted_bit, bit in zip(list(mask), list(mem_place))
+        ]
+    )
+    xs = [match.start() for match in re.finditer("X", mem_place)]
+    n_x = len(xs)
+    permutations = [
+        "".join(sequence) for sequence in itertools.product("01", repeat=n_x)
+    ]
+    addresses = []
+    for perm in permutations:
+        address = list(mem_place)
+        for i, bit in enumerate(perm):
+            address[xs[i]] = bit
+        addresses.append(int("".join(address), 2))
+
+    return addresses
 
 
 if __name__ == "__main__":
