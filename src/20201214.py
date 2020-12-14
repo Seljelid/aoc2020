@@ -40,6 +40,8 @@ def docking_data():
             addresses = _get_addresses(mask, mem_place)
             for address in addresses:
                 memory[address] = value
+        else:
+            raise Exception("Invalid input")
 
     agg = sum(memory.values())
     print(f"The sum is {agg} in part 2")
