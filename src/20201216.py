@@ -49,7 +49,6 @@ def ticket_translation():
 
     # Part 2
     possible_limitations = {i: [] for i, _ in enumerate(limitations)}
-    secured_limitations = {}
     df = pd.DataFrame(valid_tickets)
     for limitation, bounds in limitations.items():
         could_be = df.isin(bounds).sum() == df.shape[0]
@@ -58,23 +57,16 @@ def ticket_translation():
             possible_limitations[i].append(limitation)
     possible_limitations = {k: set(v) for k, v in possible_limitations.items()}
 
+    departure_values = []
     order = sorted(possible_limitations, key=lambda k: len(possible_limitations[k]))
     for i in order:
         secured = possible_limitations[i].pop()
-        secured_limitations[i] = secured
+        if secured.startswith("departure"):
+            departure_values.append(my_ticket[i])
         for v in possible_limitations.values():
             v.discard(secured)
 
-    departure_keys = []
-    for k, v in secured_limitations.items():
-        if v.startswith("departure"):
-            departure_keys.append(k)
-
-    my_numbers = []
-    for k in departure_keys:
-        my_numbers.append(my_ticket[k])
-
-    print(f"The departure product is {np.prod(my_numbers)}")
+    print(f"The departure product is {np.prod(departure_values)}")
 
 
 if __name__ == "__main__":
