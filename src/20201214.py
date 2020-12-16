@@ -1,6 +1,5 @@
 import re
 import itertools
-from copy import deepcopy
 
 
 def docking_data():
@@ -47,7 +46,7 @@ def docking_data():
     print(f"The sum is {agg} in part 2")
 
 
-def _get_addresses(mask: str, mem_place):
+def _get_addresses(mask: str, mem_place: str) -> list:
     mem_place = "".join(
         [
             shifted_bit if shifted_bit in ["1", "X"] else bit
