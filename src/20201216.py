@@ -16,10 +16,6 @@ def ticket_translation():
             l = line.split(":")[0]
             bounds = re.findall(r"[0-9]+", line)
             bounds = [int(bound) for bound in bounds]
-            limitations[l] = [
-                range(bounds[0], bounds[1] + 1),
-                range(bounds[2], bounds[3] + 1),
-            ]
             limitations[l] = set(range(bounds[0], bounds[1] + 1)).union(
                 set(range(bounds[2], bounds[3] + 1))
             )
